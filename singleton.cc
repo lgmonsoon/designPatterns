@@ -2,6 +2,7 @@
 #include <vector>
 #include <thread>
 #include <atomic>
+#include <algorithm>
 
 class Singleton {
 public:
@@ -23,7 +24,7 @@ int main() {
     std::vector<std::thread> thrds;
     for(int i = 0; i < 100000; i++) {
         thrds.emplace_back(std::thread([](){auto& a = Singleton::getInstance();}));
-        thrds.back().join();
     }
+    for_each(thrds.begin(), thrds.end(), [](auto& t){ t.join(); });
     std::cout << "i = " << Singleton::i << std::endl;
 }
